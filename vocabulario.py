@@ -1,3 +1,8 @@
+# Sebastián Daniel Tamayo Guzmán - alu0101131108
+# Inteligencia Artifical Avanzada
+# Proyecto PLN.
+# Repo link: git@github.com:alu0101131108/IAA-language-model-ecommerce.git
+
 import csv
 import re
 import nltk
