@@ -1,7 +1,7 @@
 # Sebastián Daniel Tamayo Guzmán - alu0101131108
 # Inteligencia Artifical Avanzada
 # Proyecto PLN.
-# Repo link: git@github.com:alu0101131108/IAA-language-model-ecommerce.git
+# Repo link: https://github.com/alu0101131108/IAA-language-model-ecommerce.git
 
 import csv
 import re
@@ -26,14 +26,15 @@ tokens = []
 
 
 for row in data:
-  # Use Regex to remove URLs 
-  row[1] = re.sub(r'^(http|www)', '', row[1], flags=re.MULTILINE)
 
   # Lower case all words.
   row[1] = row[1].lower()
 
   # Filter non whitelisted characters.
   row[1] = ''.join(filter(whitelist.__contains__, row[1]))
+
+  # Use Regex to remove URLs 
+  row[1] = re.sub(r'(www|http)(.)*', '', row[1])
 
   # Tokenization.
   rowTokens = nltk.word_tokenize(row[1])
