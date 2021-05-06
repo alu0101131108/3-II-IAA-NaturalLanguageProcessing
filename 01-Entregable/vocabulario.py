@@ -6,9 +6,10 @@
 import csv
 import re
 import nltk
+# nltk.download('punkt')
 
 # Read each row from csv as a list.
-with open('ecom-train.csv', newline='') as filehandle:
+with open('./../ecom-train.csv', newline='') as filehandle:
   reader = csv.reader(filehandle)
   data = list(reader)
 
@@ -22,7 +23,7 @@ stopwords = ['a','able','about','across','after','all','almost','also','am','amo
 'says','she','should','since','so','some','than','that','the','their','them','then','there','these',
 'they','this','tis','to','too','twas','us','wants','was','we','were','what','when','where','which','while',
 'who','whom','why','will','with','would','yet','you','your']
-tokens = []
+tokens = set()
 
 
 for row in data:
@@ -39,18 +40,15 @@ for row in data:
   # Tokenization.
   rowTokens = nltk.word_tokenize(row[1])
   for token in rowTokens:
-    tokens.append(token)
+    # Also filter stopwords
+    if (token not in stopwords):
+      tokens.add(token)
 
-# Preserve only unique values.
-token_set = set(tokens)
-
-# Filter stop words
-for stopword in stopwords:
-  token_set.discard(stopword)
-
-clean_tokens = list(token_set)
+# Sort tokens.
+clean_tokens = list(tokens)
 clean_tokens.sort()
 
+# Output results to file.
 with open('vocabulario.txt', 'w') as filehandle:
   filehandle.write('Numero de palabras: %s\n' % len(clean_tokens))
   for token in clean_tokens:
