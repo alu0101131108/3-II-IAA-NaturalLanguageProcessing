@@ -9,14 +9,13 @@ import math
 import nltk
 # nltk.download('punkt')
 
-# Size found with code from part 01.
-vocabularySize = 78604
-
+print('Loading data from ecom-train.csv...')
 # Read each row from csv as a list.
 with open('./../ecom-train.csv', newline='') as filehandle:
   reader = csv.reader(filehandle)
   data = list(reader)
 
+print('Data structures setting...')
 # Preprocessing.
 whitelist = set('abcdefghijklmnopqrstuvwxyz ')
 stopwords = ['a','able','about','across','after','all','almost','also','am','among','an','and','any','are','as','at',
@@ -29,7 +28,8 @@ stopwords = ['a','able','about','across','after','all','almost','also','am','amo
 'who','whom','why','will','with','would','yet','you','your']
 
 # Name data
-outputs = ['aprendizajeH.txt', 'aprendizajeB.txt', 'aprendizajeC.txt', 'aprendizajeE.txt']
+# corpus_outputs = ['corpusH.txt', 'corpusB.txt', 'corpusC.txt', 'corpusE.txt']
+learn_outputs = ['aprendizajeH.txt', 'aprendizajeB.txt', 'aprendizajeC.txt', 'aprendizajeE.txt']
 classes = ['Household', 'Books', 'Clothing & Accessories', 'Electronics']
 
 # Corpus data storage.
@@ -41,6 +41,8 @@ for i in range(4):
     'frecuency': {}
   }
 
+print('Preprocess data and class corpus creation...')
+# Preprocess and create corpus data structures.
 for row in data:
   # Lower case all words.
   row[1] = row[1].lower()
@@ -54,23 +56,31 @@ for row in data:
   # Tokenization.
   rowTokens = nltk.word_tokenize(row[1])
 
+  # Also filter stopwords.
+  stopwordsSet = set(stopwords)
+  cleanRowTokens = [item for item in rowTokens if item not in stopwordsSet]
+
   # Corpus data filling.
-  if (corpus_datas.get(row[0], 0) != 0):
-    corpus = corpus_datas.get(row[0], 0)
+  if (corpus_datas.get(row[0], 0) != 0):  # Ensures the class is known.
+    corpus = corpus_datas.get(row[0])
     corpus['documents'] += 1
-    corpus['words'] += len(rowTokens)
+    corpus['words'] += len(cleanRowTokens)
     frecuencies = corpus['frecuency']
 
-    for token in rowTokens:
-      if (token not in stopwords):
-        if (frecuencies.get(token, 0) == 0):
-          frecuencies[token] = 1
-        else:
-          frecuencies[token] += 1
+    for token in cleanRowTokens:
+      if (frecuencies.get(token, 0) == 0):
+        frecuencies[token] = 1
+      else:
+        frecuencies[token] += 1
 
-# Output results
+# The program located at ./../01-Entregable/vocabulario.py computes this value.
+vocabularySize = 78604
+ 
+  
+# Create learn result files.
 for i in range(4):
-  with open(outputs[i], 'w') as filehandle:
+  print('Creating learning file for class ' + str(classes[i]) + '...')
+  with open(learn_outputs[i], 'w') as filehandle:
     # Headers.
     corpus = corpus_datas[classes[i]]
     filehandle.write('Numero de documentos del corpus: %s\n' % corpus['documents'])
@@ -79,9 +89,8 @@ for i in range(4):
     # Word info.
     corpusVocabulary = list(corpus['frecuency'].keys())
     corpusVocabulary.sort()
-    
     for token in corpusVocabulary:
-      # Compute probabilty logarithm
+      # Compute probabilty logarithm with Laplace softener. (xD)
       logProb = math.log((corpus['frecuency'][token] + 1) / (corpus['words'] + vocabularySize))
       filehandle.write('Palabra: %s ' % token)
       filehandle.write('Frec: %s ' % corpus['frecuency'][token])
