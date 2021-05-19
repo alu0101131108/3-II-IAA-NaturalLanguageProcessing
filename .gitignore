@@ -1,2 +1,4 @@
 ecom-train.csv
 .vscode
+*.csv
+*.txt
