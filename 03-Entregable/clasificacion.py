@@ -21,8 +21,8 @@ stopwords = ['a','able','about','across','after','all','almost','also','am','amo
 'who','whom','why','will','with','would','yet','you','your']
 
 # Load data from corpus test input.
-print('Loading data from ecom-train.csv...')
-with open('./corpus_test.csv', newline='') as filehandle:
+print('Loading data from test descriptions file...')
+with open('./ecom-test-descriptions.csv', 'r', encoding = 'utf-8-sig') as filehandle:
   reader = csv.reader(filehandle)
   data = list(reader)
 
@@ -39,7 +39,7 @@ for i in range(4):
 # Load corpus data from learning files.
 print('Loading data from learning files...')
 for i in range(4):
-  with open('./../02-Entregable/' + learningFiles[i], 'r', encoding='utf8', errors='ignore') as filehandle:
+  with open('./../02-Entregable/' + learningFiles[i], 'r', encoding='utf8') as filehandle:
     corpus = corpus_datas[classes[i]] 
     corpus['documentsN'] = int((filehandle.readline()).split()[-1])
     corpus['wordsN'] = int(filehandle.readline().split()[-1])
