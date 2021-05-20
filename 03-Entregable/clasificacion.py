@@ -22,7 +22,7 @@ stopwords = ['a','able','about','across','after','all','almost','also','am','amo
 
 # Load data from corpus test input.
 print('Loading data from test descriptions file...')
-with open('./ecom-test-descriptions.csv', 'r', encoding = 'utf-8-sig') as filehandle:
+with open('./ecom-test-row.csv', 'r', encoding = 'utf-8-sig') as filehandle:
   reader = csv.reader(filehandle)
   data = list(reader)
 
