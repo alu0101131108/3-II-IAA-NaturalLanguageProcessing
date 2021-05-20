@@ -1,4 +1,3 @@
 ecom-train.csv
+ecom-test-row.csv
 .vscode
-*/*.csv
-*/*.txt
